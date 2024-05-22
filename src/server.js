@@ -1,20 +1,19 @@
-const http = require('node:http')
-const createServer = http.createServer
+const http = require('http');
+const { createUsersTable } = require('./users/database/usersDB');
+const usersRoutes = require('./users/routes/usersRoutes');
 
+const PORT = 3000;
+const ADDRESS = '127.0.0.1';
 
-const server = createServer((req, res) => {
-    if (req.method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Get user!\n')
-    } else if (req.method === 'POST') {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Post user!\n')
-    } else {
-        res.statusCode = 404;
-        res.end()
+createUsersTable();
+
+const server = http.createServer(async (req, res) => {
+    const url = req.url
+    if (url.startsWith('/users')) {
+        usersRoutes(req, res)
     }
-})
+});
 
-server.listen(3000, '127.0.0.1', () => {
-    console.log('Listening on 127.0.0.1:3000')
-})
+server.listen(PORT, ADDRESS, () => {
+    console.log(`Listening on ${ADDRESS}:${PORT}`);
+});
