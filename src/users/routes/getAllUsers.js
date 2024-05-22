@@ -1,6 +1,6 @@
 const usersData = require("../data-access/usersData");
 
-async function getAllUsers(req, res) {
+async function getAllUsers(res) {
     try {
         const data = await usersData.getAllUsers();
         res.writeHead(200, { 'Content-Type': 'application/json' });
